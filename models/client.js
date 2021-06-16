@@ -6,6 +6,7 @@ let ClientSchema = new Schema({
   birthdate: { type: Date },
   phone_number: { type: String },
   nif: { type: String },
+  address: { type: String },
 });
 
 function getAge(dateString) {

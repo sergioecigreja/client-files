@@ -4,6 +4,7 @@ let ClientFile = require("./clientfile");
 let Note = require("./note");
 let Appointment = require("./appointment");
 let mongoose = require("mongoose");
+const client = require("./client");
 
 const mongoDB =
   "mongodb+srv://root:967845oDRAUDE@cluster0.cq5me.mongodb.net/ficha-clientes?retryWrites=true&w=majority";
@@ -18,12 +19,13 @@ let clientFiles = [];
 let notes = [];
 let appointments = [];
 
-function clientCreate(name, birthdate, phone_number, nif, cb) {
+function clientCreate(name, birthdate, phone_number, nif, address, cb) {
   clientDetail = {
     name: name,
     birthdate: birthdate,
     phone_number: phone_number,
     nif: nif,
+    address: address,
   };
 
   let client = new Client(clientDetail);
@@ -33,16 +35,13 @@ function clientCreate(name, birthdate, phone_number, nif, cb) {
     }
     console.log("New Client: " + client);
     clients.push(client);
+    console.log(client);
     cb(null, client);
   });
 }
 
-function clientfileCreate(client, description, cb) {
-  clientfileDetail = {
-    client: client,
-    description: description,
-  };
-  let clientfile = new ClientFile(clientfileDetail);
+function clientfileCreate(detail, cb) {
+  let clientfile = new ClientFile(detail);
   clientfile.save(function (err) {
     if (err) {
       cb(err, null);
@@ -94,6 +93,7 @@ function createClients(cb) {
           new Date(),
           "918668437",
           "123123213",
+          "Rua da praia 317",
           callback
         );
       },
@@ -103,6 +103,7 @@ function createClients(cb) {
           new Date(),
           "918668427",
           "123123213",
+          "Rua x y",
           callback
         );
       },
@@ -112,6 +113,7 @@ function createClients(cb) {
           new Date(),
           "918668437",
           "123123213",
+          "",
           callback
         );
       },
@@ -121,6 +123,7 @@ function createClients(cb) {
           new Date(),
           "918668437",
           "123123213",
+          "",
           callback
         );
       },
@@ -130,6 +133,7 @@ function createClients(cb) {
           new Date(),
           "918668437",
           "123123213",
+          "",
           callback
         );
       },
@@ -142,19 +146,58 @@ function createClientFiles(cb) {
   async.parallel(
     [
       function (callback) {
-        clientfileCreate(clients[0], "problema x y z", callback);
+        let detail = {
+          client: clients[0],
+          kids: 0,
+          married: false,
+          profession: "",
+          hobbies: "correr",
+          avaliation_of_posture: 8,
+          tumble_history: [
+            { date: new Date("2014", 0), description: "bicicleta" },
+          ],
+          dental_history: [{ description: "sem 3 dentes" }],
+          cirurgical_history: [
+            { date: new Date(2015, 0), description: "Ombro" },
+          ],
+          nutrition: "má nutrição",
+          treatments_made: [{ issue: "dor no ombro", treatment: "Massagem" }],
+        };
+        clientfileCreate(detail, callback);
       },
       function (callback) {
-        clientfileCreate(clients[1], "problema x y z", callback);
+        let detail = {
+          client: clients[1],
+          treatments_made: [{ issue: "dor no ombro", treatment: "Massagem" }],
+        };
+        clientfileCreate(detail, callback);
       },
       function (callback) {
-        clientfileCreate(clients[2], "problema x y z", callback);
+        let detail = {
+          client: clients[2],
+        };
+        clientfileCreate(detail, callback);
       },
       function (callback) {
-        clientfileCreate(clients[3], "problema x y z", callback);
+        let detail = {
+          client: clients[3],
+          kids: 0,
+          married: false,
+          profession: "",
+          hobbies: "correr",
+          treatments_made: [{ issue: "dor no ombro", treatment: "Massagem" }],
+        };
+        clientfileCreate(detail, callback);
       },
       function (callback) {
-        clientfileCreate(clients[4], "", callback);
+        let detail = {
+          client: clients[4],
+          kids: 0,
+          married: false,
+          nutrition: "má nutrição",
+          treatments_made: [{ issue: "dor no ombro", treatment: "Massagem" }],
+        };
+        clientfileCreate(detail, callback);
       },
     ],
     cb

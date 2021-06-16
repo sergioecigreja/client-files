@@ -1,0 +1,8 @@
+POST http://localhost:5000/clients/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "newwas ",
+    "nif": "1111111111"
+}
+
